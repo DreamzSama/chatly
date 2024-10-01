@@ -7,6 +7,8 @@ import Auth from "./pages/auth";
 import ProtectedRoute from "./context/protected/ProtectedRoute";
 import PublicRoute from "./context/protected/PublicRoute";
 import Home from "./pages/home";
+import Layout from "./components/layout/Layout";
+import Chat from "./pages/chat";
 
 function App() {
     const pb = new PocketBase("http://127.0.0.1:8090/");
@@ -36,7 +38,10 @@ function App() {
                     </Route>
 
                     <Route element={<ProtectedRoute />}>
-                        <Route path="/" element={<Home />} />
+                        <Route element={<Layout />}>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/chat" element={<Chat />} />
+                        </Route>
                     </Route>
                 </Routes>
             </Router>

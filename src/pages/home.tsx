@@ -52,7 +52,7 @@ export default function Home() {
     }, [])
 
     return (
-        <div className="text-white relative flex justify-center items-center p-6 h-screen w-screen bg-mainBg">
+        <div className="text-white relative flex justify-center items-center p-6 h-screen w-full bg-mainBg">
             <button onClick={openModal} className="bg-primary p-3 rounded-lg hover:bg-purple-900 font-medium">
                 Chat starten
             </button>
