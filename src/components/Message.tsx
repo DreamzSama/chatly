@@ -1,7 +1,6 @@
-import PocketBase from "pocketbase";
+import pb from "../pocketbase";
 
 export default function Message() {
-    const pb = new PocketBase("http://127.0.0.1:8090/");
 
     const createMessage = async () => {
         const record = await pb.collection("message").create({

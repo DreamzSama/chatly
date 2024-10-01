@@ -1,5 +1,3 @@
-import pb from "../pocketbase";
-
 
 
 

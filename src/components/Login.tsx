@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const Login: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [userData, setUserData] = useState<any>(null);
+    const [, setUserData] = useState<any>(null);
     const { login, user } = useAuth();
     const navigate = useNavigate();
 
