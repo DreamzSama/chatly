@@ -31,7 +31,7 @@ export default function Chat() {
         },
     };
 
-    const getChatData = async (id: string) => {
+    const getMessageData = async (id: string) => {
         try {
             const record = await pb.collection("message").getFullList({
                 filter: `chat = "${id}"`,
@@ -62,14 +62,35 @@ export default function Chat() {
         }
     };
 
+    
+    
     useEffect(() => {
         if (id) {
-            getChatData(id);
+            // Nachrichten abrufen
+            getMessageData(id);
+
+            // Echtzeit-Abonnement auf Nachrichten
+            pb.realtime.subscribe("message", (e) => {
+                console.log("Neue Echtzeit-Nachricht:", e.record);
+                if (e.record.chat === id) {
+                    setMessages((prevMessages) => [e.record, ...prevMessages]); // Nur wenn die Nachricht zu diesem Chat gehört
+                }
+            });
         }
+
+        return () => {
+            console.log("WebSocket wird geschlossen...");
+            pb.realtime.unsubscribe("message"); // Echtzeit-Abonnement beenden
+        };
     }, [id]);
+    
+    
 
     return (
         <div className="text-white h-full flex flex-col justify-between">
+            <div className="p-3 bg-bgDark">
+                <h1 className="text-3xl p-3">Chat</h1>
+            </div>
             <div className="flex-grow overflow-auto p-4 flex flex-col-reverse space-y-reverse space-y-3">
                 {messages.length > 0 ? (
                     messages.map((message: any) => (

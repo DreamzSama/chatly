@@ -26,7 +26,7 @@ export default function Home() {
     const createChat = async (selectedUserId: string) => {
         const record = await pb.collection("chat").create({
             users: [user?.id, selectedUserId],
-            messages: ["ddkpm45yxzxff2z"],
+            messages: [""],
         });
         console.log(record);
     }

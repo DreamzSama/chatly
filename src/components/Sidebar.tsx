@@ -1,11 +1,40 @@
 import { useEffect, useState } from "react";
 import pb from "../pocketbase";
 import { useAuth } from "../context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import ContactModal from "./ContactModal";
+import { ArrowLeftEndOnRectangleIcon, Bars3Icon } from "@heroicons/react/16/solid";
 
 export default function Sidebar() {
     const [chats, setChats] = useState<any>([]);
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
+    const [contacts, setContacts] = useState<any>({});
+    const [showModal, setShowModal] = useState(false);
+    let navigate = useNavigate();
+
+    const openModal = () => {
+        setShowModal(true);
+    };
+
+    const getContacts = async () => {
+        const contactData = await pb.collection("users").getFullList({
+            sort: "-created",
+        });
+        setContacts(contactData);
+    };
+
+    const createChat = async (selectedUserId: string) => {
+        const record = await pb.collection("chat").create({
+            users: [user?.id, selectedUserId],
+            messages: [""],
+        });
+        navigate(`/chat/${record.collectionId}`);
+    };
+
+    const handleUserSelect = (selectedUserId: string) => {
+        createChat(selectedUserId);
+        setShowModal(false);
+    };
 
     const getChats = async (userId: string | undefined) => {
         if (!userId) return;
@@ -13,12 +42,10 @@ export default function Sidebar() {
         try {
             const records = await pb.collection("chat").getFullList({
                 filter: `users ?~ "${userId}"`,
-                expand: "users",
+                expand: "users, messages",
                 $autoCancel: false,
             });
-
             setChats(records);
-            console.log(records);
         } catch (error) {
             console.error("Fehler beim Abrufen der Chats:", error);
         }
@@ -26,46 +53,61 @@ export default function Sidebar() {
 
     useEffect(() => {
         getChats(user?.id);
+        getContacts();
     }, [user?.id]);
 
     return (
-        <div className="max-w-[350px] p-4 text-white w-full bg-bgDark">
+        <div className="max-w-[350px] flex flex-col justify-between p-4 text-white w-full bg-bgDark">
             <div>
-                <h1 className="text-3xl font-medium">Chats</h1>
+                <div className="flex justify-between flex-row items-center">
+                    <h1 className="text-3xl font-medium">Chats</h1>
+                    <Bars3Icon className="w-8 h-8 cursor-pointer" />
+                </div>
+                <div className="mt-3">
+                    <input
+                        className="w-full outline-none focus:outline-primary p-2 rounded-lg bg-mainBg"
+                        type="text"
+                        placeholder="Suchen..."
+                    />
+                </div>
             </div>
-            <div className="mt-3">
-                <input
-                    className="w-full outline-none focus:outline-primary p-2 rounded-lg bg-mainBg"
-                    type="text"
-                    placeholder="Suchen..."
-                />
-            </div>
-            {chats.length > 0 ? (
-                chats.map((chat: any) => (
-                    <Link key={chat.id} to={`/chat/${chat.id}`}>
-                        <div className="flex cursor-pointer p-3 hover:bg-mainBg rounded-lg items-center mt-3">
-                            <img
-                                className="w-14 h-14 rounded-full "
-                                src="https://picsum.photos/200"
-                                alt=""
-                            />
-                            <div className="ml-3">
-                                <h2 className="text-lg font-medium">
-                                    {chat.expand?.users.map(
-                                        (u: any) =>
-                                            u.id !== user?.id && u.username
-                                    )}
-                                </h2>
-                                <p className="text-pColor">
-                                    Hey ich hab da etw...
-                                </p>
+            {/* Set a fixed height and overflow scroll */}
+            <div
+                className="mt-3 overflow-y-auto flex-grow h-full"
+            >
+                {chats.length > 0 ? (
+                    chats.map((chat: any) => (
+                        <Link key={chat.id} to={`/chat/${chat.id}`}>
+                            <div className="flex cursor-pointer p-3 hover:bg-mainBg rounded-lg items-center mt-3">
+                                <img
+                                    className="w-14 h-14 rounded-full"
+                                    src="https://picsum.photos/200"
+                                    alt=""
+                                />
+                                <div className="ml-3">
+                                    <h2 className="text-lg font-medium">
+                                        {chat.expand?.users.map(
+                                            (u: any) =>
+                                                u.id !== user?.id && u.username
+                                        )}
+                                    </h2>
+                                    <p className="text-pColor">
+                                        {chat.expand?.messages?.[
+                                            chat.expand.messages.length - 1
+                                        ]?.message || "Keine Nachricht"}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </Link>
-                ))
-            ) : (
-                <p>No chats available</p>
-            )}
+                        </Link>
+                    ))
+                ) : (
+                    <p>No chats available</p>
+                )}
+            </div>
+            <div onClick={logout} className="mt-3 cursor-pointer p-3 bg-mainBg rounded-lg flex flex-row items-center justify-between space-x-3">
+                <h2>Logout</h2>
+                <ArrowLeftEndOnRectangleIcon className="w-6 h-6" />
+            </div>
         </div>
     );
 }
