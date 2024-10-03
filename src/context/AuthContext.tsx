@@ -7,7 +7,7 @@ import pb from "../pocketbase";
 type User = {
     id: string;
     username: string;
-    // Add other user properties as needed
+    // TODO: add maybe other user properties as needed
 };
 
 type IAuthContext = {
@@ -38,13 +38,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const authData = await pb.collection('users').authWithPassword(username, password);
     
             const user: User = {
-                id: authData.record.id, // Map required fields
-                username: authData.record.username // Map required fields
+                id: authData.record.id,
+                username: authData.record.username
             }
     
             setAuthenticated(true);
-            setUser(user); // No type error now, as it's of type User
-            localStorage.setItem('user', JSON.stringify(user)); // Store user data in localStorage
+            setUser(user);
+            localStorage.setItem('user', JSON.stringify(user));
             return user;
         } catch (error) {
             console.error("Login failed:", error);
@@ -70,7 +70,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         pb.authStore.clear();
         setAuthenticated(false);
         setUser(null);
-        // Remove user data from localStorage
+        // remove user data from localStorage
         localStorage.removeItem('user');
     };
 

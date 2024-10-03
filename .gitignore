@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 .env
+pocketbase/pb_data/logs.db
+pocketbase/pb_data/logs.db
+pocketbase

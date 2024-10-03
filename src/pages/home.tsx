@@ -7,6 +7,7 @@ import { useAuth } from "../context/AuthContext";
 export default function Home() {
     const [contacts, setContacts] = useState<any>({});
     const [showModal, setShowModal] = useState(false);
+    const [chats, setChats] = useState<any>([]);
     const {user} = useAuth();
 
     const openModal = () => {
@@ -35,19 +36,11 @@ export default function Home() {
         setShowModal(false);
     }
 
-    const getChats = async (userId: string | undefined) => {
-        if (!userId) return;  // Ensure userId is available
-    
-        const record = await pb.collection("chat").getFullList({
-            filter: `users ?~ "${userId}"`,  // Use the correct filter syntax
-        });
-    
-        console.log(record);
-    }
+
     
 
     useEffect(() => {
-        getChats(user?.id);
+        
         getContacts();
     }, [])
 

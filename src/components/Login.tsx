@@ -16,7 +16,6 @@ const Login: React.FC = () => {
         }
     };
 
-    // Use useEffect to react to changes in 'user' state
     useEffect(() => {
         if (user) {
             console.log("User data after login:", user);
