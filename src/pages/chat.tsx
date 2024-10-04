@@ -80,6 +80,7 @@ export default function Chat() {
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
             sendMessageData(id);
+            setSendMessage("");
         }
     };
 
