@@ -5,12 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import ContactModal from "./ContactModal";
 import { ArrowLeftEndOnRectangleIcon, Bars3Icon } from "@heroicons/react/16/solid";
 
-export default function Sidebar() {
+export default function Sidebar({ openMenu, setOpenMenu }: any) {
     const [chats, setChats] = useState<any>([]);
     const { user, logout } = useAuth();
     const [contacts, setContacts] = useState<any>({});
     const [showModal, setShowModal] = useState(false);
     let navigate = useNavigate();
+
 
     const openModal = () => {
         setShowModal(true);
@@ -57,11 +58,11 @@ export default function Sidebar() {
     }, [user?.id]);
 
     return (
-        <div className="max-w-[350px] flex flex-col justify-between p-4 text-white w-full bg-bgDark">
+        <div style={{ display: openMenu ? "block" : "none" }} className="max-w-[350px] transition transform flex flex-col justify-between p-4 text-white w-full bg-bgDark">
             <div>
                 <div className="flex justify-between flex-row items-center">
                     <h1 className="text-3xl font-medium">Chats</h1>
-                    <Bars3Icon className="w-8 h-8 cursor-pointer" />
+                    <Bars3Icon onClick={() => setOpenMenu(!openMenu)} className="w-8 h-8 cursor-pointer" />
                 </div>
                 <div className="mt-3">
                     <input
