@@ -2,11 +2,29 @@ import React, { useState } from "react";
 import Sidebar from "../Sidebar";
 import { Outlet } from "react-router-dom";
 import ContactModal from "../ContactModal";
+import { useAuth } from "../../context/AuthContext";
+import pb from "../../pocketbase";
 
 export default function Layout() {
     const [openMenu, setOpenMenu] = useState(true);
     const [showModal, setShowModal] = useState(false); // Zustand für das Modal
     const [contacts, setContacts] = useState<any>([]); // Kontakte für das Modal
+    const { user } = useAuth();
+
+
+    const createChat = async (selectedUserId: string) => {
+        const record = await pb.collection("chat").create({
+            users: [user?.id, selectedUserId],
+            messages: [""],
+        });
+        console.log(record);
+    }
+
+    const handleUserSelect = (selectedUserId: string) => {
+        createChat(selectedUserId);
+        setShowModal(false);
+    }
+    
 
     return (
         <div className="flex bg-mainBg h-screen max-w-screen overflow-hidden">
@@ -19,7 +37,7 @@ export default function Layout() {
 
             {/* ContactModal jetzt im Layout-Komponentenbereich für Fullscreen */}
             <ContactModal
-                onUserSelect={(userId: string) => console.log(userId)} // Füge hier deine Logik zum Erstellen des Chats ein
+                onUserSelect={handleUserSelect} // Füge hier deine Logik zum Erstellen des Chats ein
                 showModal={showModal}
                 setShowModal={setShowModal}
                 user={contacts}

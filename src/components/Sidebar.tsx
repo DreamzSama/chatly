@@ -39,15 +39,17 @@ export default function Sidebar({ openMenu, setOpenMenu, openModal, setContacts 
         pb.realtime.subscribe("chat", async (e) => {
             console.log(e);
             if (e.record.users.includes(user?.id)) {
-                setChats((prevChats: any) => [e.record, ...prevChats]);
+                // setChats((prevChats: any) => [e.record, ...prevChats]);
+                getChats(user?.id);
             }
         });
     }, [user?.id]);
+    
 
     return (
         <div
             style={{ display: openMenu ? "block" : "none" }}
-            className="max-w-[350px] transition transform flex flex-col justify-between p-4 text-white w-full bg-bgDark"
+            className="max-w-[350px] transition transform flex flex-col justify-between p-4 text-white w-full bg-bgDark h-full"
         >
             <div>
                 <div className="flex justify-between flex-row items-center">
@@ -74,12 +76,18 @@ export default function Sidebar({ openMenu, setOpenMenu, openModal, setContacts 
                     </button>
                 </div>
             </div>
-            <div className="mt-3 overflow-y-auto flex-grow h-full">
+    
+            {/* Chat-Liste, mit flex-grow, damit es den Platz korrekt einnimmt */}
+            <div className="mt-3 overflow-y-auto flex-grow">
                 {chats.length > 0 ? (
                     chats.map((chat: any) => (
                         <Link key={chat.id} to={`/chat/${chat.id}`}>
                             <div className="flex cursor-pointer p-3 hover:bg-mainBg rounded-lg items-center mt-3">
-                                <img className="w-14 h-14 rounded-full" src="https://picsum.photos/200" alt="" />
+                                <img
+                                    className="w-14 h-14 rounded-full"
+                                    src="https://picsum.photos/200"
+                                    alt=""
+                                />
                                 <div className="ml-3">
                                     <h2 className="text-lg font-medium">
                                         {chat.expand?.users.map(
@@ -100,6 +108,8 @@ export default function Sidebar({ openMenu, setOpenMenu, openModal, setContacts 
                     <p>No chats available</p>
                 )}
             </div>
+    
+            {/* Logout-Bereich, fixiert am unteren Ende */}
             <div
                 onClick={logout}
                 className="mt-3 cursor-pointer p-3 bg-mainBg rounded-lg flex flex-row items-center justify-between space-x-3"
@@ -109,4 +119,5 @@ export default function Sidebar({ openMenu, setOpenMenu, openModal, setContacts 
             </div>
         </div>
     );
+    
 }
