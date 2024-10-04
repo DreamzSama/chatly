@@ -48,7 +48,7 @@ export default function Layout() {
     }, []);
 
     return (
-        <div className="flex bg-mainBg h-screen max-w-screen overflow-hidden">
+        <div className="flex bg-mainBg h-[100dvh] max-w-screen overflow-hidden">
             <ToastContainer
                 position="top-center"
                 autoClose={5000}

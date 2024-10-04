@@ -3,6 +3,7 @@ import pb from "../pocketbase";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeftEndOnRectangleIcon, Bars3Icon } from "@heroicons/react/16/solid";
+import { motion } from "framer-motion";
 
 export default function Sidebar({ openMenu, setOpenMenu, openModal, setContacts }: any) {
     const [chats, setChats] = useState<any>([]);
@@ -39,17 +40,17 @@ export default function Sidebar({ openMenu, setOpenMenu, openModal, setContacts 
         pb.realtime.subscribe("chat", async (e) => {
             console.log(e);
             if (e.record.users.includes(user?.id)) {
-                // setChats((prevChats: any) => [e.record, ...prevChats]);
                 getChats(user?.id);
             }
         });
     }, [user?.id]);
-    
 
     return (
-        <div
-            style={{ display: openMenu ? "block" : "none" }}
-            className="max-w-[350px] transition transform flex flex-col justify-between p-4 text-white w-full bg-bgDark h-full"
+        <motion.div
+            initial={{ x: "-100%" }}
+            animate={{ x: openMenu ? 0 : "-100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed top-0 left-0 max-w-[350px] flex flex-col justify-between p-4 text-white w-full bg-bgDark h-full z-50"
         >
             <div>
                 <div className="flex justify-between flex-row items-center">
@@ -76,12 +77,12 @@ export default function Sidebar({ openMenu, setOpenMenu, openModal, setContacts 
                     </button>
                 </div>
             </div>
-    
+
             {/* Chat-Liste, mit flex-grow, damit es den Platz korrekt einnimmt */}
             <div className="mt-3 overflow-y-auto flex-grow">
                 {chats.length > 0 ? (
                     chats.map((chat: any) => (
-                        <Link key={chat.id} to={`/chat/${chat.id}`}>
+                        <Link onClick={() => setOpenMenu(!openMenu)} key={chat.id} to={`/chat/${chat.id}`}>
                             <div className="flex cursor-pointer p-3 hover:bg-mainBg rounded-lg items-center mt-3">
                                 <img
                                     className="w-14 h-14 rounded-full"
@@ -108,7 +109,7 @@ export default function Sidebar({ openMenu, setOpenMenu, openModal, setContacts 
                     <p>No chats available</p>
                 )}
             </div>
-    
+
             {/* Logout-Bereich, fixiert am unteren Ende */}
             <div
                 onClick={logout}
@@ -117,7 +118,6 @@ export default function Sidebar({ openMenu, setOpenMenu, openModal, setContacts 
                 <h2>Logout</h2>
                 <ArrowLeftEndOnRectangleIcon className="w-6 h-6" />
             </div>
-        </div>
+        </motion.div>
     );
-    
 }

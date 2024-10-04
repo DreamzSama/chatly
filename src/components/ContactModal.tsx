@@ -21,7 +21,7 @@ export default function ContactModal({
     return (
         <div
         style={{ display: showModal ? "block" : "none" }}
-        className="fixed inset-0 text-white bg-black/50 z-50 flex justify-center items-center"
+        className="fixed h-full inset-0 text-white bg-black/50 z-50 flex justify-center items-center"
     >
         <div className="bg-bgDark max-w-xl w-full p-3 rounded-lg relative transform">
             <div className="absolute top-2 right-2">
