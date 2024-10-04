@@ -104,7 +104,7 @@ export default function Chat() {
 
     return (
         <div className="text-white h-full flex flex-col justify-between">
-            <div className="p-3 bg-bgDark flex items-center flex-row space-x-4">
+            <div className="p-3 bg-bgDark flex items-center justify-start flex-row space-x-4">
                 {!openMenu ? (
                     <Bars3Icon onClick={() => setOpenMenu(!openMenu)} className="w-8 h-8 cursor-pointer"  />
                 ): null}

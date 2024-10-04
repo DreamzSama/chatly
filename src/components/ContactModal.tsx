@@ -20,32 +20,34 @@ export default function ContactModal({
 }: ModalProps) {
     return (
         <div
-            style={{ display: showModal ? "block" : "none" }}
-            className="fixed inset-0 bg-black/50 flex justify-center items-center"
-        >
-            <div className="bg-bgDark max-w-xl w-full p-3 rounded-lg relative transform -translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2">
-                <div className="flex justify-end mb-4">
-                    <XCircleIcon
-                        className="h-6 w-6 cursor-pointer"
-                        onClick={() => setShowModal(false)}
-                        aria-hidden="true"
-                    />
-                </div>
-                {user.length > 0 ? (
-                    user.map((u) => (
-                        <div key={u.id}>
-                            <p
-                                onClick={() => onUserSelect(u.id)}
-                                className="hover:bg-mainBg cursor-pointer transition-all ease-in duration-100 rounded-lg p-3"
-                            >
-                                {u.username}
-                            </p>
-                        </div>
-                    ))
-                ) : (
-                    <p>No users available</p>
-                )}
+        style={{ display: showModal ? "block" : "none" }}
+        className="fixed inset-0 text-white bg-black/50 z-50 flex justify-center items-center"
+    >
+        <div className="bg-bgDark max-w-xl w-full p-3 rounded-lg relative transform">
+            <div className="absolute top-2 right-2">
+                <XCircleIcon
+                    className="h-6 w-6 cursor-pointer"
+                    onClick={() => setShowModal(false)}
+                    aria-hidden="true"
+                />
             </div>
+            <h2 className="text-3xl text-center mb-4">Kontakte</h2>
+            {user.length > 0 ? (
+                user.map((u) => (
+                    <div key={u.id}>
+                        <p
+                            onClick={() => onUserSelect(u.id)}
+                            className="hover:bg-mainBg cursor-pointer transition-all ease-in duration-100 rounded-lg p-3 text-center"
+                        >
+                            {u.username}
+                        </p>
+                    </div>
+                ))
+            ) : (
+                <p className="text-center">No users available</p>
+            )}
         </div>
+    </div>
+    
     );
 }
