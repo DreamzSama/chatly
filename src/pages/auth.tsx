@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function Auth() {
 
@@ -23,6 +24,7 @@ export const Login: React.FC<AuthModalProps> = ({ setRegisterForm }) => {
   
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
     const [, setUserData] = useState<any>(null);
     const { login, user } = useAuth();
     const navigate = useNavigate();
@@ -30,7 +32,11 @@ export const Login: React.FC<AuthModalProps> = ({ setRegisterForm }) => {
     const handleLogin = async () => {
         await login(email, password);
         if (user) {
-            navigate("/");
+            toast.success("Erfolgreich angemeldet");
+            //navigate("/");
+        } else {
+            setErrorMessage("Falsche Email oder Passwort. Bitte versuche es erneut.");
+            setPassword("");
         }
     };
 
@@ -54,8 +60,8 @@ export const Login: React.FC<AuthModalProps> = ({ setRegisterForm }) => {
                     </p>
                 </div>
                 <div className="flex flex-col space-y-4 mt-8">
-                    <input onChange={(e) => setEmail(e.target.value)} className="p-3 w-full bg-[#3B364C] rounded-lg focus:outline-primary outline-none" type="text" placeholder="Username" />
-                    <input onChange={(e) => setPassword(e.target.value)} className="p-3 w-full bg-[#3B364C] rounded-lg focus:outline-primary outline-none" type="text" placeholder="Password" />
+                    <input onChange={(e) => setEmail(e.target.value)} className="p-3 w-full bg-[#3B364C] rounded-lg focus:outline-primary outline-none" type="text" placeholder="Nutzername" />
+                    <input onChange={(e) => setPassword(e.target.value)} className="p-3 w-full bg-[#3B364C] rounded-lg focus:outline-primary outline-none" type="password" placeholder="Passwort" />
                 </div>
                 <div className="mt-4">
                     <button onClick={handleLogin} className="w-full bg-primary p-3 text-white rounded-lg">Anmelden</button>
@@ -103,8 +109,8 @@ export const Register: React.FC<AuthModalProps> = ({setRegisterForm}) => {
                 </div>
                 <div className="flex flex-col space-y-4 mt-8">
                     <input onChange={(e) => setEmail(e.target.value)} className="p-3 w-full bg-[#3B364C] rounded-lg focus:outline-primary outline-none" type="text" placeholder="Username" />
-                    <input onChange={(e) => setPassword(e.target.value)} className="p-3 w-full bg-[#3B364C] rounded-lg focus:outline-primary outline-none" type="text" placeholder="Password" />
-                    <input onChange={(e) => setPasswordConfirm(e.target.value)} className="p-3 w-full bg-[#3B364C] rounded-lg focus:outline-primary outline-none" type="text" placeholder="Confirm Password" />
+                    <input onChange={(e) => setPassword(e.target.value)} className="p-3 w-full bg-[#3B364C] rounded-lg focus:outline-primary outline-none" type="password" placeholder="Password" />
+                    <input onChange={(e) => setPasswordConfirm(e.target.value)} className="p-3 w-full bg-[#3B364C] rounded-lg focus:outline-primary outline-none" type="password" placeholder="Confirm Password" />
 
                     {passwordConfirm !== password && <h1>Password does not match</h1>}
                 </div>

@@ -38,10 +38,10 @@ const Register: React.FC = () => {
                 </div>
                 <div className="flex flex-col space-y-4 mt-8">
                     <input onChange={(e) => setEmail(e.target.value)} className="p-3 w-full bg-[#3B364C] rounded-lg focus:outline-primary outline-none" type="text" placeholder="Username" />
-                    <input onChange={(e) => setPassword(e.target.value)} className="p-3 w-full bg-[#3B364C] rounded-lg focus:outline-primary outline-none" type="text" placeholder="Password" />
-                    <input onChange={(e) => setPasswordConfirm(e.target.value)} className="p-3 w-full bg-[#3B364C] rounded-lg focus:outline-primary outline-none" type="text" placeholder="Confirm Password" />
+                    <input onChange={(e) => setPassword(e.target.value)} className="p-3 w-full bg-[#3B364C] rounded-lg focus:outline-primary outline-none" type="password" placeholder="Password" />
+                    <input onChange={(e) => setPasswordConfirm(e.target.value)} className="p-3 w-full bg-[#3B364C] rounded-lg focus:outline-primary outline-none" type="password" placeholder="Confirm Password" />
 
-                    {passwordConfirm !== password && <h1>Password does not match</h1>}
+                    {passwordConfirm !== password && <h1 className="text-red-500 font-bold">Passwörter stimmen nicht überein</h1>}
                 </div>
                 <div className="mt-4">
                     <button onClick={handleRegister} className="w-full bg-primary p-3 text-white rounded-lg">Anmelden</button>
