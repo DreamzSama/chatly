@@ -40,6 +40,14 @@ export default function Chat() {
 
     const getMessageData = async (id: string) => {
         try {
+
+            const chatRecord = await pb.collection("chat").getOne(id, {
+                expand: "users",
+            });
+
+            console.log("chat", chatRecord.expand?.users);
+            setOppUsername(chatRecord.expand?.users);
+
             const record = await pb.collection("message").getFullList({
                 filter: `chat = "${id}"`,
                 sort: "-created",
@@ -47,10 +55,10 @@ export default function Chat() {
                 expand: "chat, chat.users",
             });
 
-            setOppUsername(record[0].expand?.chat?.expand?.users);
+            // setOppUsername(record[0].expand?.chat?.expand?.users);
             setMessages(record);
 
-            console.log(record[0].expand?.chat?.expand?.users);
+            // console.log(record[0].expand?.chat?.expand?.users);
         } catch (error) {
             console.error("Fehler beim Abrufen der Chat-Daten:", error);
         }
@@ -157,9 +165,9 @@ export default function Chat() {
                 />
                 <button
                     onClick={() => sendMessageData(id)}
-                    className="p-3 rounded-lg bg-primary text-white font-semibold"
+                    className="p-3 hover:bg-primary/70 rounded-lg bg-primary text-white font-semibold"
                 >
-                    Send
+                    Senden
                 </button>
             </div>
         </div>
